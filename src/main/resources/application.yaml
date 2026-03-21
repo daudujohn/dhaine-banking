@@ -13,14 +13,14 @@ spring:
 
 springdoc:
   swagger-ui:
-    path: "/dhaine/documentation/doc-ui.html"
-    url: "/dhaine/documentation/v3/api-docs"
+    path: "/documentation/doc-ui.html"
+    url: "/documentation/v3/api-docs"
     disable-swagger-default-url: true
-    configUrl: "/dhaine/documentation/v3/api-docs/swagger-config"
+    configUrl: "/documentation/v3/api-docs/swagger-config"
     operationsSorter: "method"
     tagsSorter: "alpha"
   api-docs:
-    path: "/dhaine/documentation/v3/api-docs"
+    path: "/documentation/v3/api-docs"
 
 dhaine:
   swagger:

@@ -16,9 +16,9 @@ import lombok.Setter;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class DhaineApiResponse<T> {
+  private Integer responseCode;
   private boolean success;
   private String message;
-  private String responseId;
   private T data;
   private List<DhaineApiError> errors;
 }

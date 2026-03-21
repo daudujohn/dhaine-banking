@@ -4,6 +4,7 @@ import com.dhaine.banking.core.api.response.DhaineApiResponse;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -31,6 +32,24 @@ public class DhaineControllerAdvice {
     dhaineApiError.setApiPath(request.getContextPath());
     dhaineApiError.setMessage(exception.getMessage());
     return buildFailureResponse(List.of(dhaineApiError), HttpStatus.BAD_REQUEST);
+  }
+
+  @ExceptionHandler({MethodArgumentNotValidException.class})
+  public ResponseEntity<Object> handleValidationException(
+      MethodArgumentNotValidException ex, WebRequest request) {
+
+    List<DhaineApiError> errors =
+        ex.getBindingResult().getFieldErrors().stream()
+            .map(
+                error -> {
+                  DhaineApiError dhaineApiError = new DhaineApiError();
+                  dhaineApiError.setMessage(error.getDefaultMessage());
+                  dhaineApiError.setApiPath(request.getContextPath());
+                  return dhaineApiError;
+                })
+            .toList();
+
+    return buildFailureResponse(errors, HttpStatus.BAD_REQUEST);
   }
 
   @ExceptionHandler(Exception.class)
