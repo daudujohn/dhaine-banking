@@ -1,7 +1,6 @@
 package com.dhaine.banking.service.config;
 
-import static org.springframework.security.config.Customizer.withDefaults;
-
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,12 +25,17 @@ public class SecurityConfig {
   };
 
   @Bean
-  public SecurityFilterChain filterChain(HttpSecurity http) {
+  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http.csrf(AbstractHttpConfigurer::disable)
         .authorizeHttpRequests(
             auth ->
                 auth.requestMatchers(PATTERNS_TO_ALLOW).permitAll().anyRequest().authenticated())
-        .httpBasic(withDefaults());
+        .exceptionHandling(
+            exceptions ->
+                exceptions.authenticationEntryPoint(
+                    (request, response, authException) ->
+                        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized")));
+
     return http.build();
   }
 
