@@ -22,10 +22,6 @@ springdoc:
   api-docs:
     path: "/documentation/v3/api-docs"
 
-dhaine:
-  swagger:
-    projectTitle: "${info.app.description}"
-    projectVersion: "${info.app.version}"
 logging:
   file:
     name: dhaine-banking-service.log
