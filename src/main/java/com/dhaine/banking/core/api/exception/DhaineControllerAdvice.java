@@ -22,7 +22,7 @@ public class DhaineControllerAdvice {
 
     HttpStatus status = ex.getHttpStatus() != null ? ex.getHttpStatus() : HttpStatus.BAD_REQUEST;
 
-    return buildFailureResponse(ex.getErrors(), status);
+    return buildFailureResponse(ex.getMessage(), status);
   }
 
   @ExceptionHandler(MaxUploadSizeExceededException.class)
@@ -44,12 +44,11 @@ public class DhaineControllerAdvice {
                 error -> {
                   DhaineApiError dhaineApiError = new DhaineApiError();
                   dhaineApiError.setMessage(error.getDefaultMessage());
-                  dhaineApiError.setApiPath(request.getContextPath());
                   return dhaineApiError;
                 })
             .toList();
 
-    return buildFailureResponse(errors, HttpStatus.BAD_REQUEST);
+    return buildFailureResponse(errors.getFirst().getMessage(), HttpStatus.BAD_REQUEST);
   }
 
   @ExceptionHandler(Exception.class)
@@ -74,5 +73,10 @@ public class DhaineControllerAdvice {
     return new ResponseEntity<>(
         DhaineApiResponse.builder().success(false).message(message).errors(apiErrors).build(),
         httpStatus);
+  }
+
+  public static ResponseEntity<Object> buildFailureResponse(String message, HttpStatus httpStatus) {
+    return new ResponseEntity<>(
+        DhaineApiResponse.builder().success(false).message(message).build(), httpStatus);
   }
 }
