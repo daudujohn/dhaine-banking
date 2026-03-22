@@ -19,6 +19,6 @@ public class CreateAccountRequest {
   @NotBlank(message = "Account password cannot be blank")
   private String accountPassword;
 
-  @NotNull @DecimalMin(value = "500.00", message = "Initial deposit must be at least five hundred")
-  private double initialDeposit;
+  @NotNull(message = "An initial deposit is required to create an account") @DecimalMin(value = "500.00", message = "Initial deposit must be at least five hundred")
+  private Double initialDeposit;
 }

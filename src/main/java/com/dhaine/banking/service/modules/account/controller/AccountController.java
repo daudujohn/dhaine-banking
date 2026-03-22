@@ -2,8 +2,10 @@ package com.dhaine.banking.service.modules.account.controller;
 
 import static com.dhaine.banking.core.api.constant.AccountApiConstant.*;
 
-import com.dhaine.banking.service.modules.account.dto.AccountDTO;
+import com.dhaine.banking.core.api.response.ControllerResponse;
+import com.dhaine.banking.core.api.response.DhaineApiResponse;
 import com.dhaine.banking.service.modules.account.dto.CreateAccountRequest;
+import com.dhaine.banking.service.modules.account.service.AccountFacade;
 import com.dhaine.banking.service.modules.account.service.AccountService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -21,10 +23,20 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping()
 @Tag(name = ACCOUNT_CONTROLLER_TITLE, description = ACCOUNT_CONTROLLER_DESCRIPTION)
 public class AccountController {
+  private final AccountFacade accountFacade;
   private final AccountService accountService;
 
   @PostMapping("/create_account")
-  public AccountDTO createAccount(@Valid @RequestBody CreateAccountRequest createAccountRequest) {
-    return accountService.createAccount(createAccountRequest);
+  public DhaineApiResponse createAccount(
+      @Valid @RequestBody CreateAccountRequest createAccountRequest) {
+    accountFacade.createAccount(createAccountRequest);
+    return ControllerResponse.success("Account created successfully");
+  }
+
+  @GetMapping("/account_info/{accountNumber}")
+  public DhaineApiResponse retrieveAccount(@PathVariable String accountNumber) {
+    return ControllerResponse.success(
+        accountService.retrieveAccountInformation(accountNumber),
+        "Account information retrieved successfully");
   }
 }
