@@ -4,6 +4,7 @@ import com.dhaine.banking.core.api.response.DhaineApiResponse;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -49,6 +50,12 @@ public class DhaineControllerAdvice {
             .toList();
 
     return buildFailureResponse(errors.getFirst().getMessage(), HttpStatus.BAD_REQUEST);
+  }
+
+  @ExceptionHandler(HttpMessageNotReadableException.class)
+  public ResponseEntity<Object> handleMessageNotReadable(HttpMessageNotReadableException ex) {
+    return buildFailureResponse(
+        "Invalid request body. Please check your JSON syntax.", HttpStatus.BAD_REQUEST);
   }
 
   @ExceptionHandler(Exception.class)
