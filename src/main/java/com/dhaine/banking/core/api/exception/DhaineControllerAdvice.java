@@ -1,7 +1,10 @@
 package com.dhaine.banking.core.api.exception;
 
 import com.dhaine.banking.core.api.response.DhaineApiResponse;
+import com.dhaine.banking.core.constant.SystemConstant;
+import java.util.Arrays;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -15,11 +18,13 @@ import org.springframework.web.multipart.MaxUploadSizeExceededException;
  * @author Daudu John
  * @createdOn Mar-20(Fri)-2026
  */
+@Slf4j
 @ControllerAdvice
 public class DhaineControllerAdvice {
 
   @ExceptionHandler(DhaineException.class)
   public ResponseEntity<Object> handleDhaineException(DhaineException ex, WebRequest request) {
+    logExceptionDetails(ex);
 
     HttpStatus status = ex.getHttpStatus() != null ? ex.getHttpStatus() : HttpStatus.BAD_REQUEST;
 
@@ -29,6 +34,7 @@ public class DhaineControllerAdvice {
   @ExceptionHandler(MaxUploadSizeExceededException.class)
   public ResponseEntity<?> handleMaxUploadSizeExceededException(
       MaxUploadSizeExceededException exception, WebRequest request) {
+    logExceptionDetails(exception);
     DhaineApiError dhaineApiError = new DhaineApiError();
     dhaineApiError.setApiPath(request.getContextPath());
     dhaineApiError.setMessage(exception.getMessage());
@@ -54,12 +60,14 @@ public class DhaineControllerAdvice {
 
   @ExceptionHandler(HttpMessageNotReadableException.class)
   public ResponseEntity<Object> handleMessageNotReadable(HttpMessageNotReadableException ex) {
+    logExceptionDetails(ex);
     return buildFailureResponse(
         "Invalid request body. Please check your JSON syntax.", HttpStatus.BAD_REQUEST);
   }
 
   @ExceptionHandler(Exception.class)
   public ResponseEntity<?> handleGenericError(Exception exception, WebRequest request) {
+    logExceptionDetails(exception);
     DhaineApiError dhaineApiError = new DhaineApiError();
     dhaineApiError.setApiPath(request.getContextPath());
     dhaineApiError.setMessage(exception.getMessage());
@@ -85,5 +93,27 @@ public class DhaineControllerAdvice {
   public static ResponseEntity<Object> buildFailureResponse(String message, HttpStatus httpStatus) {
     return new ResponseEntity<>(
         DhaineApiResponse.builder().success(false).message(message).build(), httpStatus);
+  }
+
+  private void logExceptionDetails(Exception exception) {
+    String exceptionName = exception.getClass().getSimpleName();
+
+    StackTraceElement stackTraceElement =
+        Arrays.stream(exception.getStackTrace())
+            .filter(f -> f.getClassName().startsWith(SystemConstant.BASE_PACKAGE))
+            .findFirst()
+            .orElse(null);
+
+    if (stackTraceElement == null) {
+      log.error("[{}] — {}", exceptionName, exception.getMessage());
+    } else {
+      log.error(
+          "[{}] thrown at {}.{}() line:{} — {}",
+          exceptionName,
+          stackTraceElement.getClassName(),
+          stackTraceElement.getMethodName(),
+          stackTraceElement.getLineNumber(),
+          exception.getMessage());
+    }
   }
 }
