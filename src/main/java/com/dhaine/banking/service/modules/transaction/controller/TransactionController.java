@@ -1,5 +1,6 @@
 package com.dhaine.banking.service.modules.transaction.controller;
 
+import static com.dhaine.banking.core.api.constant.ApiVersionConstant.API_V1;
 import static com.dhaine.banking.core.api.constant.TransactionApiConstant.TRANSACTION_CONTROLLER_DESCRIPTION;
 import static com.dhaine.banking.core.api.constant.TransactionApiConstant.TRANSACTION_CONTROLLER_TITLE;
 
@@ -22,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping()
+@RequestMapping(API_V1)
 @Tag(name = TRANSACTION_CONTROLLER_TITLE, description = TRANSACTION_CONTROLLER_DESCRIPTION)
 public class TransactionController {
   private final TransactionFacade transactionFacade;

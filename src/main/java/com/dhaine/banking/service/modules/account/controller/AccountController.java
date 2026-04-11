@@ -1,6 +1,7 @@
 package com.dhaine.banking.service.modules.account.controller;
 
 import static com.dhaine.banking.core.api.constant.AccountApiConstant.*;
+import static com.dhaine.banking.core.api.constant.ApiVersionConstant.API_V1;
 
 import com.dhaine.banking.core.api.response.ControllerResponse;
 import com.dhaine.banking.core.api.response.DhaineApiResponse;
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping()
+@RequestMapping(API_V1)
 @Tag(name = ACCOUNT_CONTROLLER_TITLE, description = ACCOUNT_CONTROLLER_DESCRIPTION)
 public class AccountController {
   private final AccountFacade accountFacade;
@@ -29,8 +30,8 @@ public class AccountController {
   @PostMapping("/create_account")
   public DhaineApiResponse createAccount(
       @Valid @RequestBody CreateAccountRequest createAccountRequest) {
-    accountFacade.createAccount(createAccountRequest);
-    return ControllerResponse.success("Account created successfully");
+    return ControllerResponse.success(
+        accountFacade.createAccount(createAccountRequest), "Account created successfully");
   }
 
   @GetMapping("/account_info/{accountNumber}")
