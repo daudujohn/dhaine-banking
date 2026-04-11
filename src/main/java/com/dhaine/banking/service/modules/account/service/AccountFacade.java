@@ -2,6 +2,7 @@ package com.dhaine.banking.service.modules.account.service;
 
 import com.dhaine.banking.service.modules.account.dto.AccountDTO;
 import com.dhaine.banking.service.modules.account.dto.CreateAccountRequest;
+import com.dhaine.banking.service.modules.account.dto.CreateAccountResponse;
 import com.dhaine.banking.service.modules.transaction.dto.TransactionRecordDTO;
 import com.dhaine.banking.service.modules.transaction.service.TransactionHistoryService;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ public class AccountFacade {
   private final AccountService accountService;
   private final TransactionHistoryService transactionHistoryService;
 
-  public AccountDTO createAccount(CreateAccountRequest createAccountRequest) {
+  public CreateAccountResponse createAccount(CreateAccountRequest createAccountRequest) {
     AccountDTO accountDTO = accountService.createAccount(createAccountRequest);
 
     TransactionRecordDTO transactionRecordDTO = new TransactionRecordDTO();
@@ -29,6 +30,9 @@ public class AccountFacade {
     transactionHistoryService.createTransactionHistory(
         accountDTO.getAccountNumber(), transactionRecordDTO);
 
-    return accountDTO;
+    CreateAccountResponse createAccountResponse = new CreateAccountResponse();
+    createAccountResponse.setAccountName(accountDTO.getAccountName());
+    createAccountResponse.setAccountNumber(accountDTO.getAccountNumber());
+    return createAccountResponse;
   }
 }
