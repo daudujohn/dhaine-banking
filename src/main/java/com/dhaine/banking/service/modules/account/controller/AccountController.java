@@ -1,6 +1,7 @@
 package com.dhaine.banking.service.modules.account.controller;
 
 import static com.dhaine.banking.core.api.constant.AccountApiConstant.*;
+import static com.dhaine.banking.core.api.constant.ApiVersionConstant.API_V1;
 
 import com.dhaine.banking.core.api.response.ControllerResponse;
 import com.dhaine.banking.core.api.response.DhaineApiResponse;
@@ -21,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping()
+@RequestMapping(API_V1)
 @Tag(name = ACCOUNT_CONTROLLER_TITLE, description = ACCOUNT_CONTROLLER_DESCRIPTION)
 public class AccountController {
   private final AccountFacade accountFacade;
