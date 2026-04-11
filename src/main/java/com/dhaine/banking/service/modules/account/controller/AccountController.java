@@ -5,6 +5,7 @@ import static com.dhaine.banking.core.api.constant.AccountApiConstant.*;
 import com.dhaine.banking.core.api.response.ControllerResponse;
 import com.dhaine.banking.core.api.response.DhaineApiResponse;
 import com.dhaine.banking.service.modules.account.dto.CreateAccountRequest;
+import com.dhaine.banking.service.modules.account.dto.CreateAccountResponse;
 import com.dhaine.banking.service.modules.account.service.AccountFacade;
 import com.dhaine.banking.service.modules.account.service.AccountService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,8 +30,8 @@ public class AccountController {
   @PostMapping("/create_account")
   public DhaineApiResponse createAccount(
       @Valid @RequestBody CreateAccountRequest createAccountRequest) {
-    accountFacade.createAccount(createAccountRequest);
-    return ControllerResponse.success("Account created successfully");
+    return ControllerResponse.success(
+        accountFacade.createAccount(createAccountRequest), "Account created successfully");
   }
 
   @GetMapping("/account_info/{accountNumber}")
