@@ -6,7 +6,6 @@ import static com.dhaine.banking.core.api.constant.ApiVersionConstant.API_V1;
 import com.dhaine.banking.core.api.response.ControllerResponse;
 import com.dhaine.banking.core.api.response.DhaineApiResponse;
 import com.dhaine.banking.service.modules.account.dto.CreateAccountRequest;
-import com.dhaine.banking.service.modules.account.dto.CreateAccountResponse;
 import com.dhaine.banking.service.modules.account.service.AccountFacade;
 import com.dhaine.banking.service.modules.account.service.AccountService;
 import io.swagger.v3.oas.annotations.tags.Tag;
