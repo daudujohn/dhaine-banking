@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class LoginRequest {
-  @NotBlank(message = "Account name cannot be blank")
+  @NotBlank(message = "Account number cannot be blank")
   private String accountNumber;
 
   @NotBlank(message = "Account password cannot be blank")

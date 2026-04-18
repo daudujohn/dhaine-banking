@@ -1,6 +1,7 @@
 package com.dhaine.banking.service.modules.transaction.controller;
 
 import static com.dhaine.banking.core.api.constant.ApiVersionConstant.API_V1;
+import static com.dhaine.banking.core.api.constant.PaginationConstant.*;
 import static com.dhaine.banking.core.api.constant.TransactionApiConstant.TRANSACTION_CONTROLLER_DESCRIPTION;
 import static com.dhaine.banking.core.api.constant.TransactionApiConstant.TRANSACTION_CONTROLLER_TITLE;
 
@@ -42,9 +43,14 @@ public class TransactionController {
   }
 
   @GetMapping("/account_statement/{accountNumber}")
-  public DhaineApiResponse retrieveHistory(@PathVariable String accountNumber) {
+  public DhaineApiResponse retrieveHistory(
+      @PathVariable String accountNumber,
+      @RequestParam(value = PAGE_NUMBER, defaultValue = DEFAULT_PAGE_NUMBER, required = false)
+          int pageNumber,
+      @RequestParam(value = PAGE_SIZE, defaultValue = DEFAULT_PAGE_SIZE, required = false)
+          int pageSize) {
     return ControllerResponse.success(
-        transactionService.retrieveTransactionHistory(accountNumber),
+        transactionService.retrieveTransactionHistory(accountNumber, pageNumber, pageSize),
         "Transaction history retrieved successfully");
   }
 }

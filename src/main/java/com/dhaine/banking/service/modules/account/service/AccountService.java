@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +22,6 @@ import org.springframework.stereotype.Service;
 public class AccountService {
   private final PasswordEncoder passwordEncoder;
   private final Map<String, AccountDTO> accounts = new HashMap<>();
-  private final SecureRandom random = new SecureRandom();
 
   public AccountDTO createAccount(CreateAccountRequest createAccountRequest) {
     AccountDTO accountDTO = new AccountDTO();
@@ -34,8 +32,6 @@ public class AccountService {
     accountDTO.setAccountNumber(generateAccountNumber());
 
     accounts.put(accountDTO.getAccountNumber(), accountDTO);
-
-    log.info(ObjectUtils.toString(accounts));
 
     return accountDTO;
   }
